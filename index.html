@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="generator" content="Hugo 0.88.1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+	<link rel="stylesheet" href="css/custom.css">
+	<link rel="stylesheet" href="css/normalize.css">
+	<title>BigCodec</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body data-new-gr-c-s-check-loaded="14.1091.0" data-gr-ext-installed="">
+
+<div class=" container" >
+<header>
+</header>
+<main>
+<article itemscope itemtype="https://schema.org/BlogPosting">
+
+<div class="container pt-5 mt-5 shadow p-5 mb-5 bg-white rounded">
+	<div class="text-center">
+		<h1>BigCodec:</h1>
+        <h3>Pushing the Limits of Low-Bitrate Neural Speech Codec</h3>
+		[<a href="">Paper</a>]
+		[<a href="https://github.com/Aria-K-Alethia/BigCodec">GitHub</a>]
+		<br> 
+		<p>  
+			Detai Xin<sup>1</sup>, Xu Tan<sup>2</sup>, Shinnosuke Takamichi<sup>3</sup>, Hiroshi Saruwatari<sup>1</sup>
+		</p>
+		</p>   
+		<p><sup>1</sup>The University of Tokyo, <sup>2</sup>Microsoft, <sup>3</sup>Keio University</p> 
+		
+	</div>
+	<p>
+        <b>Abstract:</b> 
+		We present BigCodec, a low-bitrate neural speech codec.
+		While recent neural speech codecs have shown impressive progress, their performance significantly deteriorates at low bitrates (around 1 kbps).
+Although a low bitrate inherently restricts performance, other factors, such as model capacity, also hinder further improvements.
+To address this problem, we scale up the model size to 159M parameters that is more than 10 times larger than popular codecs with about 10M parameters.
+Besides, we integrate sequential models into traditional convolutional architectures to better capture temporal dependency and adopt low-dimensional vector quantization to ensure a high code utilization.
+Comprehensive objective and subjective evaluations show that BigCodec, with a bitrate of 1.04 kbps, significantly outperforms several existing low-bitrate codecs.
+Furthermore, BigCodec achieves objective performance comparable to popular codecs operating at 4-6 times higher bitrates, and even delivers better subjective perceptual quality than the ground truth.	<br>
+		<br>
+			This page is <b> for research demonstration purposes </b> only.
+		<br>
+
+      </p>
+</div>
+
+
+<div class="container pt-5 mt-5 shadow p-5 mb-5 bg-white rounded">		
+	<h2 id="model-overview" style="text-align: center;">Overview</h2>
+		<p style="text-align: center;">
+			<img src="pics/overview.png" width="1000" alt="">
+		</p>
+	<p style="text-align: center;">
+		Fig. 1: Architecture of the VQ-VAE generator of BigCodec. Please refer to the paper for the definitions of the symbols.
+	</p>
+</div>
+
+
+<div class="container pt-5 mt-5 shadow p-5 mb-5 bg-white rounded">
+	<h2 style="text-align: center;"> Main results </h2>
+	<p style="text-align: center;">
+		TABLE 1: Main results of BigCodec on the LibriSpeech test set with 2620 utterances.
+		<b>Bold</b> indicates the best score with <em>p</em> < 1e-3 
+		compared to previous low-bitrate codecs. 
+		For MUSHRA both the mean scores and the 95% confidence intervals are reported. 
+		The inter-rater agreement of the MUSHRA test is revealed by an ICC(2) of 0.73.
+	</p>
+	<p style="text-align: center;">
+		<img src="pics/main_results.png" width="1000" alt="">
+	</p>
+
+	<h4 style="text-align: center;"> Audio samples </h2>
+	<h6 style="text-align: left;">
+		We show 10 audio samples of the reconstructed speech by BigCodec and other baselines. <br>
+		All samples are randomly selected from the LibriSpeech test set. <br>
+		Note that, these samples were also used in the MUSHRA test, 
+		so you can also rate them by yourself and compare with the MUSHRA results. <br><br>
+		We indiate the bitrate (bps) of each codec.
+	</h6>
+	<hr>
+		<div class="table-responsive pt-3" tabindex="0">
+			<table class="table table-hover pt-2">
+				<thead>
+					<tr>
+					<th style="text-align: center">GT</th>
+					<th style="text-align: center">BigCodec (1.04k)</th>
+					<th style="text-align: center">DAC-4k</th>
+					<th style="text-align: center">TF-Codec (1.5k)</th>
+					<th style="text-align: center">Encodec-6k</th>
+					<th style="text-align: center">LLM-Codec (0.74k)</th>
+					<th style="text-align: center">Encodec-1.5k</th>
+					<th style="text-align: center">DAC-1k</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/8455-210777-0033.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/8455-210777-0033.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac_4k/8455-210777-0033.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/tf_codec/8455-210777-0033.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec_6k/8455-210777-0033.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/llm_codec/8455-210777-0033.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec/8455-210777-0033.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac/8455-210777-0033.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/2830-3980-0051.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/2830-3980-0051.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac_4k/2830-3980-0051.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/tf_codec/2830-3980-0051.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec_6k/2830-3980-0051.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/llm_codec/2830-3980-0051.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec/2830-3980-0051.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac/2830-3980-0051.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/6829-68771-0003.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/6829-68771-0003.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac_4k/6829-68771-0003.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/tf_codec/6829-68771-0003.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec_6k/6829-68771-0003.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/llm_codec/6829-68771-0003.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec/6829-68771-0003.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac/6829-68771-0003.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/1284-1181-0008.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/1284-1181-0008.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac_4k/1284-1181-0008.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/tf_codec/1284-1181-0008.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec_6k/1284-1181-0008.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/llm_codec/1284-1181-0008.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec/1284-1181-0008.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac/1284-1181-0008.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/61-70970-0024.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/61-70970-0024.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac_4k/61-70970-0024.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/tf_codec/61-70970-0024.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec_6k/61-70970-0024.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/llm_codec/61-70970-0024.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec/61-70970-0024.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac/61-70970-0024.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/1580-141083-0013.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/1580-141083-0013.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac_4k/1580-141083-0013.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/tf_codec/1580-141083-0013.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec_6k/1580-141083-0013.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/llm_codec/1580-141083-0013.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec/1580-141083-0013.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac/1580-141083-0013.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/908-157963-0028.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/908-157963-0028.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac_4k/908-157963-0028.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/tf_codec/908-157963-0028.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec_6k/908-157963-0028.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/llm_codec/908-157963-0028.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec/908-157963-0028.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac/908-157963-0028.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/1221-135767-0010.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/1221-135767-0010.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac_4k/1221-135767-0010.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/tf_codec/1221-135767-0010.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec_6k/1221-135767-0010.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/llm_codec/1221-135767-0010.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec/1221-135767-0010.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac/1221-135767-0010.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/672-122797-0069.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/672-122797-0069.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac_4k/672-122797-0069.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/tf_codec/672-122797-0069.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec_6k/672-122797-0069.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/llm_codec/672-122797-0069.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec/672-122797-0069.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac/672-122797-0069.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/1995-1836-0009.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/1995-1836-0009.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac_4k/1995-1836-0009.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/tf_codec/1995-1836-0009.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec_6k/1995-1836-0009.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/llm_codec/1995-1836-0009.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/encodec/1995-1836-0009.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/dac/1995-1836-0009.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+				</tbody>
+			</table>
+			</div>
+	<br/>
+</div>
+
+<div class="container pt-5 mt-5 shadow p-5 mb-5 bg-white rounded">
+	<h2 style="text-align: center;"> Unseen languages </h2>
+	<p style="text-align: center;">
+		TABLE 2: Multilingual evaluation results of BigCodec on the MLS test set 
+		with 700 utterances from 7 OOD languages. 
+		Note that BigCodec is the <em>only</em> codec that is trained 
+		on a monolingual corpus (English). 
+		<b>Blold</b> indicates the best score with 
+		<em>p</em> < 1e-3 compared to previous low-bitrate codecs.
+	</p>
+	<p style="text-align: center;">
+		<img src="pics/unseen_languages.png" width="750" alt="">
+	</p>
+
+	<h4 style="text-align: center;"> Audio samples </h2>
+	<h6 style="text-align: left;">
+		For each unseen language we show 1 sample generated by BigCodec and other baselines. <br>
+		All samples are randomly selected from the multilingual LibriSpeech (MLS) test set. <br>
+		We indiate the bitrate (bps) of each codec. <br><br>
+		You may find that the objective performance of BigCodec on unseen languages is not as good as on English.
+		However, note that (1) BigCodec is the only codec in the table that is trained on English only, and 
+		(2) Like the significant higher MUSHRA score of BigCodec in the main results (Table 1), 
+		we also find the perceptual quality of BigCodec is better than other codecs on unseen languages,
+		even if the objective performance is lower than EnCodec-6k or DAC-4k.
+		However, note that this observation is not formally verified in the paper, so we encourage you listen to the samples.
+	</h6>
+	<hr>
+		<div class="table-responsive pt-3" tabindex="0">
+			<table class="table table-hover pt-2">
+				<thead>
+					<tr>
+					<th style="text-align: center">Language</th>
+					<th style="text-align: center">GT</th>
+					<th style="text-align: center">BigCodec (1.04k)</th>
+					<th style="text-align: center">DAC-4k</th>
+					<th style="text-align: center">TF-Codec (1.5k)</th>
+					<th style="text-align: center">Encodec-6k</th>
+					<th style="text-align: center">LLM-Codec (0.74k)</th>
+					<th style="text-align: center">Encodec-1.5k</th>
+					<th style="text-align: center">DAC-1k</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td style="text-align: center">Polish</td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/gt/polish_9098_8338_000097.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/bigcodec/polish_9098_8338_000097.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/dac_4k/polish_9098_8338_000097.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/tf_codec/polish_9098_8338_000097.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/encodec_6k/polish_9098_8338_000097.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/llm_codec/polish_9098_8338_000097.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/encodec/polish_9098_8338_000097.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/dac/polish_9098_8338_000097.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center">Portuguese</td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/gt/portuguese_7925_6390_000087.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/bigcodec/portuguese_7925_6390_000087.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/dac_4k/portuguese_7925_6390_000087.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/tf_codec/portuguese_7925_6390_000087.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/encodec_6k/portuguese_7925_6390_000087.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/llm_codec/portuguese_7925_6390_000087.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/encodec/portuguese_7925_6390_000087.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/dac/portuguese_7925_6390_000087.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center">Italian</td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/gt/italian_13211_8906_000032.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/bigcodec/italian_13211_8906_000032.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/dac_4k/italian_13211_8906_000032.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/tf_codec/italian_13211_8906_000032.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/encodec_6k/italian_13211_8906_000032.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/llm_codec/italian_13211_8906_000032.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/encodec/italian_13211_8906_000032.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/dac/italian_13211_8906_000032.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center">Spanish</td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/gt/spanish_97_567_000122.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/bigcodec/spanish_97_567_000122.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/dac_4k/spanish_97_567_000122.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/tf_codec/spanish_97_567_000122.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/encodec_6k/spanish_97_567_000122.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/llm_codec/spanish_97_567_000122.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/encodec/spanish_97_567_000122.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/dac/spanish_97_567_000122.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center">French</td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/gt/french_5790_4893_000130.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/bigcodec/french_5790_4893_000130.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/dac_4k/french_5790_4893_000130.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/tf_codec/french_5790_4893_000130.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/encodec_6k/french_5790_4893_000130.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/llm_codec/french_5790_4893_000130.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/encodec/french_5790_4893_000130.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/dac/french_5790_4893_000130.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center">Dutch</td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/gt/dutch_4396_4370_000122.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/bigcodec/dutch_4396_4370_000122.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/dac_4k/dutch_4396_4370_000122.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/tf_codec/dutch_4396_4370_000122.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/encodec_6k/dutch_4396_4370_000122.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/llm_codec/dutch_4396_4370_000122.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/encodec/dutch_4396_4370_000122.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/dac/dutch_4396_4370_000122.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center">German</td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/gt/german_9494_8747_000079.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/bigcodec/german_9494_8747_000079.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/dac_4k/german_9494_8747_000079.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/tf_codec/german_9494_8747_000079.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/encodec_6k/german_9494_8747_000079.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/llm_codec/german_9494_8747_000079.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/encodec/german_9494_8747_000079.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/unseen_languages/dac/german_9494_8747_000079.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+				</tbody>
+			</table>
+			</div>
+	<br/>
+</div>
+
+<div class="container pt-5 mt-5 shadow p-5 mb-5 bg-white rounded"></div>
+	<h2 style="text-align: center;"> Ablation studies </h2>
+	<p style="text-align: center;">
+		TABLE 3: Results of ablation studies on the LibriSpeech test set 
+		with 2620 utterances.
+		<b>Bold</b> indicates the best scores with p < 1e-3.
+	</p>
+	<p style="text-align: center;">
+		<img src="pics/ablation.png" width="750" alt="">
+	</p>
+
+	<h4 style="text-align: center;"> Audio samples </h2>
+	<h6 style="text-align: left;">
+		We show 10 audio samples of the reconstructed speech by BigCodec and BigCodec-base <br>
+		All samples are randomly selected from the LibriSpeech test set. <br>
+		We indiate the model size (without discriminator) of each model.
+	</h6>
+	<hr>
+		<div class="table-responsive pt-3" tabindex="0">
+			<table class="table table-hover pt-2">
+				<thead>
+					<tr>
+					<th style="text-align: center">GT</th>
+					<th style="text-align: center">BigCodec (159M)</th>
+					<th style="text-align: center">BigCodec-base (17M)</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/8455-210777-0033.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/8455-210777-0033.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec_base/8455-210777-0033.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/2830-3980-0051.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/2830-3980-0051.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec_base/2830-3980-0051.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/6829-68771-0003.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/6829-68771-0003.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec_base/6829-68771-0003.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/1284-1181-0008.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/1284-1181-0008.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec_base/1284-1181-0008.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/61-70970-0024.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/61-70970-0024.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec_base/61-70970-0024.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/1580-141083-0013.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/1580-141083-0013.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec_base/1580-141083-0013.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/908-157963-0028.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/908-157963-0028.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec_base/908-157963-0028.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/1221-135767-0010.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/1221-135767-0010.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec_base/1221-135767-0010.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/672-122797-0069.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/672-122797-0069.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec_base/672-122797-0069.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+					<tr>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/gt/1995-1836-0009.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec/1995-1836-0009.wav" >Your browser does not support the audio element.</audio></td>
+						<td style="text-align: center"><audio controls="controls" style="width: 200px;"><source src="audio/main/bigcodec_base/1995-1836-0009.wav" >Your browser does not support the audio element.</audio></td>
+					</tr>
+				</tbody>
+			</table>
+			</div>
+	<br/>
+</div>
+
+
+</body>
+</html>
